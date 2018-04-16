@@ -66,6 +66,40 @@ in order to give the network the capability of more complex tasks.
   \end{tikzpicture}
   \caption{Example of a neural network}
 \end{figure}
+
+The value of each neuron will take will be a function of a the weighted sum
+of all neurons connected to it plus a bias. If we take $W_n$ as a matrix with
+the weights of each neuron from layer $n-1$ to $n$, $b_n$ the associated bias
+of each neuron in layer $n$ and $a_n$ the value of each neuron in layer $n$
+then we would have:
+\[a_n=f(Wa_{n-1}+b)\]
+
+It is common for the sigmoid function ($\sigma(x)=\frac{1}{1+e^{-x}}$)
+to be used as activation function for having certain characteristics.
+These characteristics include being monotonic, differentiable, having domain
+over all $\mathbb{R}$ and having range $(0,1)$. For this motive in the current
+document the sigmoid function will also be used as the activation function.
+
+Defining
+\[\sigma\left(
+  \begin{bmatrix}
+    a_1\\
+    a_2\\
+    \vdots\\
+    a_n
+  \end{bmatrix}
+  \right) =
+  \begin{bmatrix}
+    \sigma(a_1)\\
+    \sigma(a_2)\\
+    \vdots\\
+    \sigma(a_n)
+  \end{bmatrix}
+\]
+We would end up with
+\[a_n=\sigma(Wa_{n-1}+b)\]
+
+
 \begin{figure}[!h]
   \centering
   \def\layersep{2.5cm}
@@ -88,7 +122,7 @@ in order to give the network the capability of more complex tasks.
           (I-n) edge node [above] {$w_n$} (O);
 
   \end{tikzpicture}
-  \caption{Example of a neural network}
+  \caption{Weights in a neural network}
 \end{figure}
 
 \end{document}
