@@ -1,4 +1,4 @@
-\documentclass[a4paper]{amsart}
+\documentclass[a4paper, 12pts]{amsart}
 
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
@@ -17,17 +17,40 @@
 \maketitle
 \tableofcontents
 \section{Basics on Neural Networks}
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
 
-  \node[main node] (0) {\phantom{0}};
-  \node[main node] (2) [left  of=0] {\phantom{0}};
-  \node[main node] (1) [above of=2] {\phantom{0}};
-  \node[main node] (3) [below of=2] {\phantom{0}};
+\def\layersep{2.5cm}
 
-  \path[every node/.style={font=\sffamily\small}]
-  (1) edge node [right] {} (0)
-  (2) edge node [right] {} (0)
-  (3) edge node [left] {} (0);
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+  \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+  \tikzstyle{neuron}=[circle,draw,minimum size=17pt,inner sep=0pt]
+  \tikzstyle{annot} = [text width=4em, text centered]
+
+  % Draw the input layer nodes
+  \foreach \name / \y in {1,...,4}
+  % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+  \node[neuron, pin=left:Input \#\y] (I-\name) at (0,-\y) {};
+
+  % Draw the hidden layer nodes
+  \foreach \name / \y in {1,...,5}
+  \path[yshift=0.5cm]
+  node[neuron] (H-\name) at (\layersep,-\y cm) {};
+
+  % Draw the output layer node
+  \node[neuron,pin={[pin edge={->}]right:Output}, right of=H-3] (O) {};
+
+  % Connect every node in the input layer with every node in the
+  % hidden layer.
+  \foreach \source in {1,...,4}
+  \foreach \dest in {1,...,5}
+  \path (I-\source) edge (H-\dest);
+
+  % Connect every node in the hidden layer with the output layer
+  \foreach \source in {1,...,5}
+  \path (H-\source) edge (O);
+
+  % Annotate the layers
+  \node[annot,above of=H-1, node distance=1cm] (hl) {Hidden layer};
+  \node[annot,left of=hl] {Input layer};
+  \node[annot,right of=hl] {Output layer};
 \end{tikzpicture}
 \end{document}
