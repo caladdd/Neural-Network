@@ -10,7 +10,7 @@
   \monthname[\THEMONTH], \THEYEAR}
 
 \title{Different to the Minimizing Function on Neural Networks}
-\author{Andrés Felipe Ortega Montoya\\
+\author{Andrés Felipe Ortega Montoya \and Diego Antonio Fonseca Guzmán\\
   \monthyeardate{\today}}
 
 \begin{document}
@@ -124,6 +124,24 @@ We would end up with
   \end{tikzpicture}
   \caption{Weights in a neural network}
 \end{figure}
+\section{Training the Network}
+To train the network a initial test data set, composed by the input and the expected output, is used. The objective is to compare the expected output and the network's output, using the error function as proposed:
+
+\[E(\hat{y}, y) = \frac{1}{2n}\sum_{i=1}^{n} (\hat{y}-y)^2\]
+
+
+With these results we can modify each weight and bias. This will result in the network giving an output closer to the expected one. After many tests the change in weights and biases will be determined by using the partial derivatives of the cost function in respect to the weights and in respect to the biases, resulting in the gradient which we seek to minimize in order to get the best results:
+
+\[\nabla C = \frac{\partial C}{\partial W}\]
+
+To get the next position we desire to advance to we use these equations:
+
+\[ w'_k = w_k - \eta\frac{\partial C}{\partial w_k}\]
+
+
+\[b'_k = b_k - \eta\frac{\partial C}{\partial b_k}\]
+
+Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$ is the learning factor which determines how far we will advance.
 
 
 \[
