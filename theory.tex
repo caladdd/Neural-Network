@@ -249,4 +249,10 @@ Our cost function satisfies this property as it can be written this way:
 \[C = \frac{1}{2n}\sum_{i=1}^{n} (y_i-a_i^l)^2\]
 
 The backpropagation algorithm also uses a not so common matrix operation, called the Hadamard Product. This operation is dentoed by the symbol $\bigodot$ and it refers to the elementwise product of a matrix. 
+
+An important value to define is called the error, represented by $\delta_j^l$, where l is the layer and j is the neuron that contains this value. $\delta_j^l$ is a meaningful value because just by changing one neuron's error the total cost will be modified. This value is defined as:
+
+\[\delta_j^l = \frac{\partial C}{\partial z_j^l} ;  z^l_j = w_{jk}^la_k^{l-1}+b_j^l\]
+
+Where l is the layer, j is the neuron in the $l^{th}$ layer and k is the neuron in the $l-1^{th}$ layer.
 \end{document}
