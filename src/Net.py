@@ -15,5 +15,25 @@ class Neuron:
         self.bias = b
 
     def calculateValue(self):
-        # Temporaly
+        # Temporally
         self.value = value
+
+
+class Net:
+    def __init__(self,neurons):
+        self.countLayers = 1
+        self.schema = [neurons] 
+        self.initialNeurons = neurons
+        self.lastNeurons = neurons
+
+    def addLayer(self,neurons,weightList):
+        indexWeight = 0 
+        for lastNeuron in self.lastNeurons:
+            for neuron in neurons:
+                lastNeuron.addConection((weightList[indexWeight],neuron))
+                neuron.addConectionI((weightList[indexWeight],lastNeuron))
+                indexWeight += 1
+        self.lastNeurons = neurons
+        self.schema.append(neurons)
+        self.countLayers += 1 
+  
