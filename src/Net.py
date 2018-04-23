@@ -28,6 +28,7 @@ class Neuron:
 class InitialNeuron(Neuron):
     def __init__(self,initialValue):
         Neuron.__init__(self)
+        self.lPrev = None
         self.value = initialValue 
         
     def setValue(self,num): 
