@@ -1,5 +1,6 @@
 import math
 
+
 class Neuron:
     def __init__(self):
         self.bia = 0
@@ -19,7 +20,7 @@ class Neuron:
 
     def setBia(self,b):
         self.bia = b
-
+        
     def calculateValue(self):
         if self.needCalculate:
             acum = 0
@@ -32,10 +33,8 @@ class Neuron:
             self.value = 1/(1+math.exp(-acum))
             self.needCalulate = False
         return self.value
-            
-    
 
-        
+
 class InitialNeuron(Neuron):
     def __init__(self,initialValue):
         Neuron.__init__(self)
@@ -47,11 +46,10 @@ class InitialNeuron(Neuron):
         self.value = num
 
 
-        
 class Net:
     def __init__(self,neurons):
         self.countLayers = 1
-        self.schema = [neurons] 
+        self.schema = [neurons]
         self.initialNeurons = neurons
         self.lastNeurons = neurons
 
@@ -64,7 +62,7 @@ class Net:
         return string
     
     def addLayer(self,neurons,weightList):
-        indexWeight = 0 
+        indexWeight = 0
         for lastNeuron in self.lastNeurons:
             for neuron in neurons:
                 lastNeuron.addConection(weightList[indexWeight],neuron)
@@ -72,8 +70,8 @@ class Net:
                 indexWeight += 1
         self.lastNeurons = neurons
         self.schema.append(neurons)
-        self.countLayers += 1 
-        
+        self.countLayers += 1
+
 
 def main():
     n1 = InitialNeuron(0.1)
@@ -107,4 +105,5 @@ def main():
 
     print(net)
     
+
 main()
