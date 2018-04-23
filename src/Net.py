@@ -11,32 +11,32 @@ class Neuron:
     def addConectionI(self,weight,neuron):
         self.lPrev.append((weight,neuron))
 
-    def setBia(self,b):
+    def setBias(self,b):
         self.bias = b
 
     def calculateValue(self):
         # Temporally
         self.value = value
 
-        
+
 class InitialNeuron(Neuron):
     def __init__(self,initialValue):
         Neuron.__init__(self)
-        self.value = initialValue 
-        
-    def setValue(self,num): 
+        self.value = initialValue
+
+    def setValue(self,num):
         sefl.value = num
 
-        
+
 class Net:
     def __init__(self,neurons):
         self.countLayers = 1
-        self.schema = [neurons] 
+        self.schema = [neurons]
         self.initialNeurons = neurons
         self.lastNeurons = neurons
 
     def addLayer(self,neurons,weightList):
-        indexWeight = 0 
+        indexWeight = 0
         for lastNeuron in self.lastNeurons:
             for neuron in neurons:
                 lastNeuron.addConection((weightList[indexWeight],neuron))
@@ -44,8 +44,8 @@ class Net:
                 indexWeight += 1
         self.lastNeurons = neurons
         self.schema.append(neurons)
-        self.countLayers += 1 
-  
+        self.countLayers += 1
+
 
 def main():
     n1 = InitialNeuron(0.1)
@@ -61,6 +61,5 @@ def main():
     n6 = Neuron()
     n7 = Neuron()
     neurons = [n4,n5,n6,n7]
-    
 
 main()
