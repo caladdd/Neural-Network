@@ -10,7 +10,7 @@
 \newdateformat{monthyeardate}{
   \monthname[\THEMONTH], \THEYEAR}
 
-\title{Different to the Minimizing Function on Neural Networks}
+\title{A take on Neural Networks}
 \author{Calad J.}
 \author{Fonseca D.}
 \author{Ortega A.}
@@ -187,26 +187,36 @@ be characterized by
 \end{equation*}
 
 \section{Training the Network}
-To train the network a initial test data set, composed by the input and the expected output, is used. The objective is to compare the expected output and the network's output, using the error function as proposed:
+To train the network a initial test data set, composed by the input and the
+expected output, is used. The objective is to compare the expected output and
+the network's output, using the error function as proposed:
 
-\[E(\hat{y}, y) = \frac{1}{2n}\sum_{i=1}^{n} (y_i-\hat{y_i})^2\]
+\begin{equation*}
+  E(\hat{y}, y) = \frac{1}{2n}\sum_{i=1}^{n} (y_i-\hat{y_i})^2
+\end{equation*}
 
+With these results we can modify each weight and bias. This will result in the
+network giving an output closer to the expected one. After many tests the
+change in weights and biases will be determined by using the partial derivatives
+of the cost function in respect to the weights and in respect to the biases,
+resulting in the gradient which we seek to minimize in order to get the best
+results:
 
-With these results we can modify each weight and bias. This will result in the network giving an output closer to the expected one. After many tests the change in weights and biases will be determined by using the partial derivatives of the cost function in respect to the weights and in respect to the biases, resulting in the gradient which we seek to minimize in order to get the best results:
-
-\[\nabla C = \frac{\partial C}{\partial W}\]
+\begin{equation*}
+  \nabla C = \frac{\partial C}{\partial W}
+\end{equation*}
 
 To get the next position we desire to advance to we use these equations:
 
-\[ w'_k = w_k - \eta\frac{\partial C}{\partial w_k}\]
+\begin{align*}
+  w'_k &= w_k - \eta\frac{\partial C}{\partial w_k}\\
+  b'_k &= b_k - \eta\frac{\partial C}{\partial b_k}
+\end{align*}
 
+Where $w_k$ are the network's weight, $b_k$ are the network's biases, and
+$\eta$ is the learning factor which determines how far we will advance.
 
-\[b'_k = b_k - \eta\frac{\partial C}{\partial b_k}\]
-
-Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$ is the learning factor which determines how far we will advance.
-
-
-\[
+\begin{equation*}
   \begin{bmatrix}
     z_{1}^{l}\\
     z_{2}^{l}\\
@@ -233,9 +243,9 @@ Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$
     \vdots\\
     b_{n}^{l}
   \end{bmatrix}
-\]
+\end{equation*}
 
-\[
+\begin{equation*}
   \begin{bmatrix}
     a_{1}^{l}\\
     a_{2}^{l}\\
@@ -249,7 +259,7 @@ Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$
     \vdots\\
     \sigma(z_{n}^{l})
   \end{bmatrix}
-\]
+\end{equation*}
 
 \begin{figure}[!ht]
   \centering
@@ -296,23 +306,49 @@ Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$
 
 \section{The Backpropagation Algorithm}
 
-This algorithm computes the gradient of the cost function and updates weights and biases as needed. Backpropagation is the core element of a neural network's learning process. The relation with the partial derivatives of the cost function comes from the base concept of backpropagation which is understanding how changing weights and biases change the cost function. To understand it we first need to assume the cost function can be written as an average of the cost function for every test case. As described in the previous section, the error function and cost function are the same. With this in mind, the assumption states that the cost in the whole network is equivalent to the average of the costs for each test:
+This algorithm computes the gradient of the cost function and updates weights
+and biases as needed. Backpropagation is the core element of a neural network's
+learning process. The relation with the partial derivatives of the cost function
+comes from the base concept of backpropagation which is understanding how
+changing weights and biases change the cost function. To understand it we first
+need to assume the cost function can be written as an average of the cost
+function for every test case. As described in the previous section, the error
+function and cost function are the same. With this in mind, the assumption
+states that the cost in the whole network is equivalent to the average of the
+costs for each test:
 
-\[C = \frac{1}{n}\sum_{i=1}^{n}C_i\]
+\begin{equation*}
+  C = \frac{1}{n}\sum_{i=1}^{n}C_i
+\end{equation*}
 
-Another important assumption is that the cost function can be written as a function of the network's outputs:
+Another important assumption is that the cost function can be written as a
+function of the network's outputs:
 
-\[C = C(a^l)\]
+\begin{equation*}
+  C = C(a^l)
+\end{equation*}
 
 Our cost function satisfies this property as it can be written this way:
 
-\[C = \frac{1}{2n}\sum_{i=1}^{n} (y_i-a_i^l)^2\]
+\begin{equation*}
+  C = \frac{1}{2n}\sum_{i=1}^{n} (y_i-a_i^l)^2
+\end{equation*}
 
-The backpropagation algorithm also uses a not so common matrix operation, called the Hadamard Product. This operation is dentoed by the symbol $\bigodot$ and it refers to the elementwise product of a matrix. 
 
-An important value to define is called the error, represented by $\delta_j^l$, where l is the layer and j is the neuron that contains this value. $\delta_j^l$ is a meaningful value because just by changing one neuron's error the total cost will be modified. This value is defined as:
+The backpropagation algorithm also uses a not so common matrix operation,
+called the Hadamard Product. This operation is denoted by the symbol $\bigodot$
+and it refers to the element-wise product of a matrix.
 
-\[\delta_j^l = \frac{\partial C}{\partial z_j^l} ;  z^l_j = w_{jk}^la_k^{l-1}+b_j^l\]
+An important value to define is called the error, represented by $\delta_j^l$,
+where l is the layer and j is the neuron that contains this value. $\delta_j^l$
+is a meaningful value because just by changing one neuron's error the total cost
+will be modified. This value is defined as:
 
-Where l is the layer, j is the neuron in the $l^{th}$ layer and k is the neuron in the $l-1^{th}$ layer.
+\begin{equation*}
+  \delta_j^l = \frac{\partial C}{\partial z_j^l},\quad
+  z^l_j = w_{jk}^la_k^{l-1}+b_j^l
+\end{equation*}
+
+Where l is the layer, j is the neuron in the $l^{th}$ layer and k is the neuron
+in the $l-1^{th}$ layer.
 \end{document}
