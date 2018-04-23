@@ -2,10 +2,11 @@ import math
 
 class Neuron:
     def __init__(self):
-        self.bias = 0
+        self.bia = 0
         self.lPrev = []
         self.lNext = []
         self.value = 0
+        self.needCalculate = True
 
     def __str__(self):
         return "("+str(self.value)+")"
@@ -17,11 +18,21 @@ class Neuron:
         self.lPrev.append((weight,neuron))
 
     def setBia(self,b):
-        self.bias = b
+        self.bia = b
 
     def calculateValue(self):
-        # Temporally
-        self.value = value
+        if self.needCalculate:
+            acum = 0
+            count = 0
+            for weight,neuron in lPrev:
+                acum += neuron.calculateValue()*weight 
+                count += 1
+            acum = (count*bia)+acum
+            #temporally
+            self.value = 1/(1+math.exp(-acum))
+            self.needCalulate = False
+        return self.value
+            
     
 
         
@@ -29,10 +40,12 @@ class InitialNeuron(Neuron):
     def __init__(self,initialValue):
         Neuron.__init__(self)
         self.lPrev = None
-        self.value = initialValue 
+        self.value = initialValue
+        self.needCalculate = False
         
     def setValue(self,num): 
-        sefl.value = num
+        self.value = num
+
 
         
 class Net:
@@ -60,7 +73,7 @@ class Net:
         self.lastNeurons = neurons
         self.schema.append(neurons)
         self.countLayers += 1 
-  
+        
 
 def main():
     n1 = InitialNeuron(0.1)
