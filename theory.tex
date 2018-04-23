@@ -1,8 +1,9 @@
-\documentclass[a4paper, 12pts]{amsart}
+\documentclass[a4paper, 12pt]{amsart}
 
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{datetime}
+\usepackage[margin=1.25in]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 
@@ -10,24 +11,31 @@
   \monthname[\THEMONTH], \THEYEAR}
 
 \title{Different to the Minimizing Function on Neural Networks}
-\author{Ortega Andrés, Fonseca Diego, Calad Juan\\
-  \monthyeardate{\today}}
+\author{Calad J.}
+\author{Fonseca D.}
+\author{Ortega A.}
+\author{Marin M.}
+\date{\today}
 
 \begin{document}
 \maketitle
 \tableofcontents
 \section{Basics on Neural Networks}
 A neural network can be viewed as a directed graph in which each vertex serves
-as a ``neuron'' and have an associated output value for how active it is.
-For the first layer of neurons, their output values are simply input given to
-the network. In the case of other neurons it will calculated taking into
-account the activation values of all neurons connected to it. The output or
-``return'' value of the neural network will be how active are all the neurons
-that have no connections, or the ones belonging to the output layer. It is
-common to have a set of intermediate neurons between the input and output layer
-in order to give the network the capability of more complex tasks.
+as a ``neuron'' that has an associated output value telling how active it is.
+There will be two types of neurons of prime importance, these are inputs and
+output neurons. The former simply takes the value of the input we will feed the
+network with and the latter will be where we will collect the desired answer
+from.\\
+The simplest type of neural network there is and the one to be explored
+in this document is called  a ``feedforward'' neural network. In this type of
+networks all neurons are arranged by layers, where the only connections allowed
+are between neurons in adjacent layers and information always travels from one
+layer to the layer that comes next to it, never backwards (hence the
+``feedforward'' term). This can be best seen in Figure
+\ref{fig:feedforward example}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \def\layersep{2.5cm}
 
@@ -38,7 +46,6 @@ in order to give the network the capability of more complex tasks.
 
     % Draw the input layer nodes
     \foreach \y in {1,...,4}
-    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
     \node[neuron, pin=left:$x_\y$] (I-\y) at (0,-\y) {};
 
     % Draw the hidden layer nodes
@@ -64,57 +71,31 @@ in order to give the network the capability of more complex tasks.
     \node[annot,left of=hl] {Input layer};
     \node[annot,right of=hl] {Output layer};
   \end{tikzpicture}
-  \caption{Example of a neural network}
+  \caption{Example of a feedforward neural network}
+  \label{fig:feedforward example}
 \end{figure}
 
-The value of each neuron will take will be a function of a the weighted sum
-of all neurons connected to it plus a bias. If we take $W_n$ as a matrix with
-the weights of each neuron from layer $n-1$ to $n$, $b_n$ the associated bias
-of each neuron in layer $n$ and $a_n$ the value of each neuron in layer $n$
-then we would have:
-\[a_n=f(Wa_{n-1}+b)\]
+In this type of neural networks the first layer will serve as input layer.
+Similarly the last layer of such a network will serve as an output layer.
+Intermediate layers are simply called ``hidden layers'' and will be treated
+mostly as black boxes given that the activation values for these might not have
+a clear interpretation even if the network produces highly accurate answers.
 
-It is common for the sigmoid function ($\sigma(x)=\frac{1}{1+e^{-x}}$)
-to be used as activation function for having certain characteristics.
-These characteristics include being monotonic, differentiable, having domain
-over all $\mathbb{R}$ and having range $(0,1)$. For this motive in the current
-document the sigmoid function will also be used as the activation function.
-
-Defining
-\[\sigma\left(
-  \begin{bmatrix}
-    a_1\\
-    a_2\\
-    \vdots\\
-    a_n
-  \end{bmatrix}
-  \right) =
-  \begin{bmatrix}
-    \sigma(a_1)\\
-    \sigma(a_2)\\
-    \vdots\\
-    \sigma(a_n)
-  \end{bmatrix}
-\]
-We would end up with
-\[a_n=\sigma(Wa_{n-1}+b)\]
-
-
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \def\layersep{2.5cm}
 
   \begin{tikzpicture}[shorten >=1pt,->, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
-    \tikzstyle{neuron}=[circle,draw,minimum size=17pt,text height=.5ex,
+    \tikzstyle{neuron}=[circle,draw,minimum size=17pt,
     inner sep=1pt]
 
     \node[neuron, pin=left:$x_1$] (I-1) at (0,-1) {};
     \node[neuron, pin=left:$x_2$] (I-2) at (0,-2) {};
     \node (D) at (0,-3) {$\vdots$};
     \node[neuron, pin=left:$x_n$] (I-n) at (0,-4) {};
-    
-    \node[neuron,pin={[pin edge={->}]right:Output}] (O) at (\layersep,-2.5) {};
+
+    \node[neuron,pin={[pin edge={->}]right:Output}] (O) at (\layersep,-2.5){};
 
     \path (I-1) edge node [above] {$w_1$} (O)
           (I-2) edge node [above] {$w_2$} (O)
@@ -123,7 +104,88 @@ We would end up with
 
   \end{tikzpicture}
   \caption{Weights in a neural network}
+  \label{fig:weights in a neural network}
 \end{figure}
+
+The activation value of a neuron in a given layer will be a function of the
+activation values of neurons in the previous layer. It will also take into
+account how important each of those neurons is to the neuron and a given bias of
+it towards being activated or not. We can express this as follows:
+\begin{equation*}
+  a^l_i = f(b^l_i+\sum_{j=1}^{p}w^l_{i,j}a^{l-1}_j)
+\end{equation*}
+Where $a^l_i$ represents the activation value of neuron $i$ in layer $l$,
+$b^l_i$ the associated bias with that neuron, $w^l_{i,j}$ the weight $a^l_i$
+gives to $a^{l-1}_j$ and $f$ any arbitrary function. If we define $f$ of a
+matrix as evaluating $f$ in each element of the matrix we can then expand this
+into:
+
+\begin{equation*}
+  \begin{bmatrix}
+    a^l_1\\
+    a^l_2\\
+    \vdots\\
+    a^l_q
+  \end{bmatrix}
+  =
+  f\left(
+    \begin{bmatrix}
+      w^l_{1,1} & w^l_{1,2} & \dots & w^l_{1,p}\\
+      w^l_{2,1} & w^l_{2,2} & \dots & w^l_{2,p}\\
+      \vdots    & \vdots    & \ddots& \vdots   \\
+      w^l_{q,1} & w^l_{q,2} & \dots & w^l_{q,p}\\
+    \end{bmatrix}
+    \begin{bmatrix}
+      a^{l-1}_1\\
+      a^{l-1}_2\\
+      \vdots\\
+      a^{l-1}_p
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+      b^l_1\\
+      b^l_2\\
+      \vdots\\
+      b^l_q
+    \end{bmatrix}
+  \right)\\
+\end{equation*}
+With $p$ and $q$ being the number of neurons in layers $l-1$ and $l$
+respectively. Finally this can be written as:
+
+\begin{equation*}
+  \underset{q\times 1}{a^l}
+  = f(\underset{q\times p}{W^l} \underset{p\times 1}{a^{l-1}}
+  + \underset{q\times 1}{b^l})
+\end{equation*}
+
+For the sake of simplicity we will take:
+\begin{align*}
+  z^l &= W^la^{l-1}+b^l\\
+  a^l &= f(z^l)
+\end{align*}
+
+The election of the activation function $f$ will highly influence the process
+of training the neural network, making the process of finding a fitting $f$
+important.
+It is desired for this function to be monotonic increasing and differentiable
+which will mean that increasing $z^l$ by a small value will also increase
+$a^l$ by another small value.
+Also, as any given layer can have an arbitrary number of neurons, $z^l$ could
+take any real value. However it is desirable that $a^l$ is in some fixed range
+in order to more easily handle the outputs of each neuron, and specially the
+ones in the output layer.
+It is common in the literature to chose as activation function a sigmoid curve,
+and more specifically the logistic curve given by
+\begin{equation*}
+  \sigma(x)=\frac{1}{1+e^{-x}}
+\end{equation*}
+This we will use as our activation function, which makes our final network to
+be characterized by
+\begin{equation*}
+  a^l=\sigma(z^l)
+\end{equation*}
+
 \section{Training the Network}
 To train the network a initial test data set, composed by the input and the expected output, is used. The objective is to compare the expected output and the network's output, using the error function as proposed:
 
@@ -188,10 +250,8 @@ Where $w_k$ are the network's weight, $b_k$ are the network's biases, and $\eta$
     \sigma(z_{n}^{l})
   \end{bmatrix}
 \]
-\\
-\\
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \def\layersep{2.5cm}
 
