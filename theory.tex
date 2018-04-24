@@ -350,7 +350,7 @@ will be modified. This value is defined as:
 \end{equation*}
 
 Where l is the layer, j is the neuron in the $l^{th}$ layer and k is the neuron
-in the $l-1^{th}$ layer.With this in mind, the objective is to change z in a way that the cost nears zero. This can be seen as if the neuron output is equal to $\sigma(z_j^l)$  we will add a change $\sigma(z_j^l + \Delta z_j^l)$ so that the overall cost is changed by $\frac{\partial C}{\partial_j^l}\Delta z$ This is achieved by using a $\Delta z_l^j$ with a sign opposite to $\frac{\partial C}{\partial_j^l}$ However, if the partial derivative of the cost with respect to the actual z is near zero then it cannot be improved much. 
+in the $l-1^{th}$ layer. z is the neuron's "weighted input", the activation value before applying the sigmoid function. With this in mind, the objective is to change z in a way that the cost nears zero. This can be seen as if the neuron output is equal to $\sigma(z_j^l)$  we will add a change $\sigma(z_j^l + \Delta z_j^l)$ so that the overall cost is changed by $\frac{\partial C}{\partial_j^l}\Delta z$ This is achieved by using a $\Delta z_l^j$ with a sign opposite to $\frac{\partial C}{\partial_j^l}$ However, if the partial derivative of the cost with respect to the actual z is near zero then it cannot be improved much. 
 
 To calculate the components of the output layer's error we use the following expression:
 
@@ -360,7 +360,15 @@ However the desired expression should come in a matrix form so we can use the fo
 
 \[\delta^L = \nabla_a C \odot \sigma '(z^L)\]
 
-Where $\nabla_a C$ is a vector containing each of the cost function's partial derivatives in respect to a neuron's activation.
+Where $\nabla_a C$ is a vector containing each of the cost function's partial derivatives in respect to a neuron's activation.The error in a layer can also be expressed as a function of the next layer:
+
+\[\delta^l = ((w^{l+1})^T\delta^{l+1})\odot\sigma '(z^l)\]
+
+This allows us to move the error backwards by calculating the error in the previous layer.
+
+Other important quantities will be the partial derivative of the cost function in respect to a bias in the network and the partial derivative of the cost function in respect to a weight in the network. 
+
+Considering all of these values we can now proceed to understand how the backpropagation algorithm works. First, the input is given and so the first layer will have an activation value. For each layer we calculate the weighted input and the activation of the neurons in the layer. With this it is possible to calculate the output error and backpropagate it by calculating the error in each of the previous layers. Our output will be the gradient of the cost function. This output represents how the cost changes depending on the weights and biases so that we can minimize it. 
 
 
 \end{document}
