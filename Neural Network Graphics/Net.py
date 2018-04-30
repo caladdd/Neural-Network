@@ -1,4 +1,5 @@
 import math
+from tkinter import *
 
 
 class Neuron:
@@ -20,18 +21,19 @@ class Neuron:
 
     def setBia(self,b):
         self.bia = b
+
+    def requireCalculate(self):
+        self.needCalculate = True
         
     def calculateValue(self):
         if self.needCalculate:
             acum = 0
-            count = 0
-            for weight,neuron in lPrev:
+            for weight,neuron in self.lPrev:
                 acum += neuron.calculateValue()*weight 
-                count += 1
-            acum = (count*bia)+acum
+            acum = self.bia+acum
             #temporally
             self.value = 1/(1+math.exp(-acum))
-            self.needCalulate = False
+            self.needCalculate = False
         return self.value
 
 
@@ -53,6 +55,12 @@ class Net:
         self.initialNeurons = neurons
         self.lastNeurons = neurons
 
+    def getInitialNeurons(self):
+        return self.initialNeurons
+
+    def getLastNeurons():
+        return self.lastNeurons
+
     def __str__(self):
         string = ""
         for layer in self.schema:
@@ -61,49 +69,94 @@ class Net:
             string+="\n"
         return string
     
-    def addLayer(self,neurons,weightList):
-        indexWeight = 0
+    def addLayer(self,neurons):
         for lastNeuron in self.lastNeurons:
             for neuron in neurons:
-                lastNeuron.addConection(weightList[indexWeight],neuron)
-                neuron.addConectionI(weightList[indexWeight],lastNeuron)
-                indexWeight += 1
+                lastNeuron.addConection(1,neuron)
+                neuron.addConectionI(1,lastNeuron)
         self.lastNeurons = neurons
         self.schema.append(neurons)
         self.countLayers += 1
 
+    def getOutput(self):
+        for i in self.lastNeurons:
+            i.calculateValue()
+
+
+class NetBuilder:
+    def buildNet(self,layers):
+        neurons = []
+        # Initial Neurons
+        for i in range(layers[0]):
+            neurons.append(InitialNeuron(0))
+        net = Net(neurons)
+        # Layers
+        for layer in layers[1:]:
+            neurons = []
+            for i in range(layer):
+                neurons.append(Neuron())
+            net.addLayer(neurons)
+        return net
+
+
+class Graphics:
+    def numNeuron(self, width, height, layers):
+        numlayers = len(layers)
+        maxNeuron = max(layers)
+        w = 1 * numlayers
+        h = width/height * maxNeuron
+        radio = 0
+        spacew = 0
+        spaceh = 0
+        if w < h:
+            spaceh = (maxNeuron+1) * 3
+            radio = (height - spaceh)/(maxNeuron*2)
+            spacew = width - (2*radio * numlayers) 
+        else:
+            spacew = ( 3 * (numlayers + 1))
+            radio = (width - spacew)/(numlayers * 2)
+            spaceh = height - (radio * 2 * maxNeuron)
+
+        return spaceh, spacew, radio
+
+
+    def run(self, layers):
+        root =Tk()
+        numlayers = len(layers)
+        maxNeuron = max(layers)
+        width = 1000
+        height = 500
+        # spacesh, spacesw, radio
+        spaceh, spacew, radio = self.numNeuron(width, height, layers)
+        #draw
+        root.title('Neural Network')
+        root.resizable(0, 0) 
+        canvas = Canvas(width = width, height = height, bg='white')
+        canvas.pack(expand=YES, fill=BOTH)
+        for i in range(0,numlayers):
+            #1
+            xn = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1))))
+            yn = (spaceh / (maxNeuron + 1)) 
+            xp = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1))))  + (2*radio)
+            yp = (spaceh / (maxNeuron + 1)) + (2*radio)
+            canvas.create_oval(xn, yn, xp, yp, fill='blue')
+        root.mainloop()
+
 
 def main():
-    n1 = InitialNeuron(0.1)
-    n2 = InitialNeuron(0.5)
-    n3 = InitialNeuron(0.222)
-
-    neurons = [n1, n2, n3]
-    net = Net(neurons)
-    print("Se ha creado una red")
-    
-    n4 = Neuron()
-    n4.setBia(0.6)
-    n5 = Neuron()
-    n5.setBia(0.65)
-    n6 = Neuron()
-    n6.setBia(0.98)
-    n7 = Neuron()
-    n7.setBia(0.2)
-    neurons = [n4,n5,n6,n7]
-    weights = [2,3,2,3,1,4,1,4,6,7,6,7]
-    net.addLayer(neurons,weights)
-    print("Se ha agregado una capa nueva")
-
-    n8 = Neuron()
-    n8.setBia(0.8)
-    n9 = Neuron()
-    n9.setBia(0.556)
-    neurons = [n8,n9]
-    weights = [1,5,9,3,8,5,7,6]
-    net.addLayer(neurons,weights)
-
+    netBuilder =  NetBuilder()
+    layers = [3,5,4,7,3,5,2,9]
+    #layers = [3,3,3,3,3,3,2,3]
+    net = netBuilder.buildNet(layers)
+    # Setting initial values 
+    iniN = net.getInitialNeurons()
+    iniN[0].setValue(0.211)
+    iniN[1].setValue(0.323)
+    iniN[2].setValue(0.888)
     print(net)
-    
+    #net.getOutput()
+    #print(net)
+    graphics = Graphics()
+    graphics.run(layers)
 
 main()
