@@ -116,7 +116,6 @@ class Graphics:
             spacew = ( 3 * (numlayers + 1))
             radio = (width - spacew)/(numlayers * 2)
             spaceh = height - (radio * 2 * maxNeuron)
-
         return spaceh, spacew, radio
 
 
@@ -134,12 +133,12 @@ class Graphics:
         canvas = Canvas(width = width, height = height, bg='white')
         canvas.pack(expand=YES, fill=BOTH)
         for i in range(0,numlayers):
-            #1
-            xn = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1))))
-            yn = (spaceh / (maxNeuron + 1)) 
-            xp = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1))))  + (2*radio)
-            yp = (spaceh / (maxNeuron + 1)) + (2*radio)
-            canvas.create_oval(xn, yn, xp, yp, fill='blue')
+            for j in range(0,layers[i]):
+                xn = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1))))
+                yn = ((j*(2*radio))+((j+1)*(spaceh / (maxNeuron + 1))))
+                xp = ((i*(2*radio))+((i+1)*(spacew / (numlayers + 1)))) + (2*radio)
+                yp = ((j*(2*radio))+((j+1)*(spaceh / (maxNeuron + 1)))) + (2*radio)
+                canvas.create_oval(xn, yn, xp, yp, fill='blue')
         root.mainloop()
 
 
