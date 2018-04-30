@@ -20,18 +20,19 @@ class Neuron:
 
     def setBia(self,b):
         self.bia = b
+
+    def requireCalculate(self):
+        self.needCalculate = True
         
     def calculateValue(self):
         if self.needCalculate:
             acum = 0
-            count = 0
-            for weight,neuron in lPrev:
+            for weight,neuron in self.lPrev:
                 acum += neuron.calculateValue()*weight 
-                count += 1
-            acum = (count*bia)+acum
+            acum = self.bia+acum
             #temporally
             self.value = 1/(1+math.exp(-acum))
-            self.needCalulate = False
+            self.needCalculate = False
         return self.value
 
 
@@ -53,6 +54,12 @@ class Net:
         self.initialNeurons = neurons
         self.lastNeurons = neurons
 
+    def getInitialNeurons(self):
+        return self.initialNeurons
+
+    def getLastNeurons():
+        return self.lastNeurons
+
     def __str__(self):
         string = ""
         for layer in self.schema:
@@ -61,51 +68,44 @@ class Net:
             string+="\n"
         return string
     
-    def addLayer(self,neurons,weightList):
-        indexWeight = 0
+    def addLayer(self,neurons):
         for lastNeuron in self.lastNeurons:
             for neuron in neurons:
-                lastNeuron.addConection(weightList[indexWeight],neuron)
-                neuron.addConectionI(weightList[indexWeight],lastNeuron)
-                indexWeight += 1
+                lastNeuron.addConection(1,neuron)
+                neuron.addConectionI(1,lastNeuron)
         self.lastNeurons = neurons
         self.schema.append(neurons)
         self.countLayers += 1
 
-    def fillRandom():
-        return 0
+    def getOutput(self):
+        for i in self.lastNeurons:
+            i.calculateValue()
+
+class NetBuilder:
+    def buildNet(self,layers):
+        neurons = []
+        # Initial Neurons
+        for i in range(layers[0]):
+            neurons.append(InitialNeuron(0))
+        net = Net(neurons)
+        # Layers
+        for layer in layers[1:]:
+            neurons = []
+            for i in range(layer):
+                neurons.append(Neuron())
+            net.addLayer(neurons)
+        return net
 
 def main():
-    n1 = InitialNeuron(0.1)
-    n2 = InitialNeuron(0.5)
-    n3 = InitialNeuron(0.222)
-
-    neurons = [n1, n2, n3]
-    net = Net(neurons)
-    print("Se ha creado una red")
-    
-    n4 = Neuron()
-    n4.setBia(0.6)
-    n5 = Neuron()
-    n5.setBia(0.65)
-    n6 = Neuron()
-    n6.setBia(0.98)
-    n7 = Neuron()
-    n7.setBia(0.2)
-    neurons = [n4,n5,n6,n7]
-    weights = [2,3,2,3,1,4,1,4,6,7,6,7]
-    net.addLayer(neurons,weights)
-    print("Se ha agregado una capa nueva")
-
-    n8 = Neuron()
-    n8.setBia(0.8)
-    n9 = Neuron()
-    n9.setBia(0.556)
-    neurons = [n8,n9]
-    weights = [1,5,9,3,8,5,7,6]
-    net.addLayer(neurons,weights)
+    netBuilder =  NetBuilder()
+    net = netBuilder.buildNet([3,5,4,7,3,5,2,9])
+    # Setting initial values 
+    iniN = net.getInitialNeurons()
+    iniN[0].setValue(0.211)
+    iniN[1].setValue(0.323)
+    iniN[2].setValue(0.888)
 
     print(net)
-
-
+    net.getOutput()
+    print(net)
 main()
