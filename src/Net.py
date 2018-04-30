@@ -72,6 +72,8 @@ class Net:
         self.schema.append(neurons)
         self.countLayers += 1
 
+    def fillRandom():
+        return 0
 
 def main():
     n1 = InitialNeuron(0.1)
@@ -104,6 +106,6 @@ def main():
     net.addLayer(neurons,weights)
 
     print(net)
-    
+
 
 main()
