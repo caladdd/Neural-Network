@@ -350,7 +350,7 @@ will be modified. This value is defined as:
 \end{equation*}
 
 Where l is the layer, j is the neuron in the $l^{th}$ layer and k is the neuron
-in the $l-1^{th}$ layer. z is the neuron's "weighted input", the activation value before applying the sigmoid function. With this in mind, the objective is to change z in a way that the cost nears zero. This can be seen as if the neuron output is equal to $\sigma(z_j^l)$  we will add a change $\sigma(z_j^l + \Delta z_j^l)$ so that the overall cost is changed by $\frac{\partial C}{\partial_j^l}\Delta z$ This is achieved by using a $\Delta z_l^j$ with a sign opposite to $\frac{\partial C}{\partial_j^l}$ However, if the partial derivative of the cost with respect to the actual z is near zero then it cannot be improved much. 
+in the $l-1^{th}$ layer. z is the neuron's "weighted input", the activation value before applying the sigmoid function. With this in mind, the objective is to change z in a way that the cost nears zero. This can be seen as if the neuron output is equal to $\sigma(z_j^l)$  we will add a change $\sigma(z_j^l + \Delta z_j^l)$ so that the overall cost is changed by $\frac{\partial C}{\partial z_j^l}\Delta z$ This is achieved by using a $\Delta z_l^j$ with a sign opposite to $\frac{\partial C}{\partial z_j^l}$ However, if the partial derivative of the cost with respect to the actual z is near zero then it cannot be improved much. 
 
 To calculate the components of the output layer's error we use the following expression:
 
