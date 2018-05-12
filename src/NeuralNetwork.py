@@ -57,17 +57,38 @@ class Net:
 			self.listLayer[0].listNeurons[indexValue].a = initalValues[indexValue]
 		# Calculating 
 		for indexLayer in range(len(self.listLayer)-1): # Iteration in layers: it starts since 2
-			print("funciona")
 			length = len(self.listLayer[indexLayer+1].listNeurons)
 			for indexNeuron in range(length): # Iteration in Neurons
 				acum = 0
-				print(indexNeuron)
 				for i in range(len(self.listLayer[indexLayer].listNeurons)): # Iteration in a*w
 					a = self.listLayer[indexLayer].listNeurons[i].a
 					w = self.listLayer[indexLayer+1].listW[indexNeuron][i]
 					acum += a*w
 				bias = self.listLayer[indexLayer+1].listNeurons[indexNeuron].bias 
 				self.listLayer[indexLayer+1].listNeurons[indexNeuron].z = acum + bias
+		# Final values
+		finalList = []
+		for finalNeuron in self.listLayer[-1].listNeurons:
+			finalList.append(finalNeuron.a)
+		return finalList
+
+class Trainer:
+	def __init__(self,neuralNetwork):
+		self.net = neuralNetwork
+
+	def dC_dbWjk(self,l,j,k):
+	def dC_dBlj(self,l,j):
+	def dC_dAljk(self,l,j,k):
+
+	def train(self,initialValues,finalValues):
+		estimatedValues = self.net.calculate(initialValues)
+
+	def backPropagation(self,inputList,outputList):
+		print("Net has started.")
+		for i in range(len(inputList)):
+			print("Net is learning...")
+			train(inputList[i],outputList[i])
+		print("Net has finished.")
 
 
 			
@@ -80,5 +101,8 @@ class Net:
 
 a = Net([3,4,3,2])
 print(a)
-a.calculate([12,23,13])
+l = a.calculate([12,23,13])
 print(a)
+print("")
+print(l)
+
