@@ -99,7 +99,7 @@ class NetBuilder:
 def main():
     netBuilder =  NetBuilder()
     # Creating a Neural Network using a builder
-    net = netBuilder.buildNet([3,5,4,7,3,5,2,9])
+    net = netBuilder.buildNet([3,3,2,3])
     # Setting initial values 
     iniN = net.getInitialNeurons()
     iniN[0].setValue(0.211)
