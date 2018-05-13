@@ -2,7 +2,10 @@
 import math 
 
 def sigmoid(x):
-	return 1/(1+math.exp(-x))
+	return math.exp(x)/(1+math.exp(x))
+
+def dSigmoid(x):
+	return math.exp(x)/(1+math.exp(x))**2
 
 
 class Neuron:
@@ -76,9 +79,55 @@ class Trainer:
 	def __init__(self,neuralNetwork):
 		self.net = neuralNetwork
 
-	def dC_dbWjk(self,l,j,k):
-	def dC_dBlj(self,l,j):
-	def dC_dAljk(self,l,j,k):
+	def dC_dWljk(self,l,j,k,y,initial=False):
+		# dZlj_dWljk 
+		acum = self.net.listLayer[l-1].listNeurons[k]
+		# dAlj_dAlj
+		zlj = self.net.listLayer[l].listNeurons[j].z
+		acum *= dSigmoid(zlj)
+		# dC_dAlj
+		if(initial)
+			alj = self.net.listLayer[l].listNeurons[j].a
+			acum *= 2*(alj-y)**2
+		else:
+			acum *= y 
+		return acum
+
+
+	def dC_dBlj(self,l,j,y,initial=False):
+		#dZlj_dBlj = 1
+		acum = 1
+		#dAlj_dAlj
+		zlj = self.net.listLayer[l].listNeurons[j].z
+		acum *= dSigmoid(zlj)
+		#dC_dAlj
+		if(initial)
+			alj = self.net.listLayer[l].listNeurons[j].a
+			acum *= 2*(alj-y)**2
+		else:
+			acum *= y 
+		return acum
+
+
+	def dC_dAljk(self,l,k,vector_y,initial=False):
+		acum = 0
+		for j in range(len(self.net.listLayer[l].listNeurons)):
+			# dZlj_dAl-1k
+			acum1 = self.net.listLayer[l].listW[j][k]
+			# dAlj_dZlj
+			acum1  *=  self.net.listLayer[l].listNeurons[j].z
+			# dC_dZlj
+			if(initial)
+				alj = self.net.listLayer[l].listNeurons[j].a
+				acum1 *= 2*(alj-vector_y[j])**2
+			else:
+				acum1 *= vector_y[j]
+			acum += acum1
+		return acum
+
+
+
+		
 
 	def train(self,initialValues,finalValues):
 		estimatedValues = self.net.calculate(initialValues)
