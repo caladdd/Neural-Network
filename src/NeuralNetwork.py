@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from copy import copy
 import math 
 
 def sigmoid(x):
@@ -51,7 +52,7 @@ class Net:
 		string = ""
 		for i in self.listLayer:
 			string += str(i)+"\n"
-			#string += str(i.listW)+"\n"	
+			string += str(i.listW)+"\n"	
 		return string
 
 	def calculate(self,initalValues):
@@ -81,12 +82,12 @@ class Trainer:
 
 	def dC_dWljk(self,l,j,k,y,initial=False):
 		# dZlj_dWljk 
-		acum = self.net.listLayer[l-1].listNeurons[k]
+		acum = self.net.listLayer[l-1].listNeurons[k].a
 		# dAlj_dAlj
 		zlj = self.net.listLayer[l].listNeurons[j].z
 		acum *= dSigmoid(zlj)
 		# dC_dAlj
-		if(initial)
+		if(initial):
 			alj = self.net.listLayer[l].listNeurons[j].a
 			acum *= 2*(alj-y)**2
 		else:
@@ -101,7 +102,7 @@ class Trainer:
 		zlj = self.net.listLayer[l].listNeurons[j].z
 		acum *= dSigmoid(zlj)
 		#dC_dAlj
-		if(initial)
+		if(initial):
 			alj = self.net.listLayer[l].listNeurons[j].a
 			acum *= 2*(alj-y)**2
 		else:
@@ -117,7 +118,7 @@ class Trainer:
 			# dAlj_dZlj
 			acum1  *=  self.net.listLayer[l].listNeurons[j].z
 			# dC_dZlj
-			if(initial)
+			if(initial):
 				alj = self.net.listLayer[l].listNeurons[j].a
 				acum1 *= 2*(alj-vector_y[j])**2
 			else:
@@ -126,18 +127,35 @@ class Trainer:
 		return acum
 
 
-
-		
-
 	def train(self,initialValues,finalValues):
 		estimatedValues = self.net.calculate(initialValues)
+		netc = copy(self.net)
+		#last layer
+		for j in range(len(self.net.listLayer[-1].listNeurons)):
+			# New bias
+			x =  0.01*self.dC_dBlj(len(self.net.listLayer)-1,j,finalValues[j],True)
+			netc.listLayer[-1].listNeurons[j].bias = self.net.listLayer[-1].listNeurons[j].bias - x
+			# New Weights 
+			for k in range(len(self.net.listLayer[-2].listNeurons)):
+				x = 0.01*self.dC_dWljk(len(self.net.listLayer)-1,j,k,finalValues[j],True)
+				netc.listLayer[-1].listW[j][k] = self.net.listLayer[-1].listW[j][k] - x
+		# New finalValues
+		finalValues1 = []
+		for k in range(len(self.net.listLayer[-2].listNeurons)):
+			x = self.dC_dAljk(len(self.net.listLayer)-1,k,finalValues,True)
+			finalValues1.append(x)
+		finalValues = finalValues1
+		self.net = netc
+
+
 
 	def backPropagation(self,inputList,outputList):
-		print("Net has started.")
+		print("Net has started learning.")
 		for i in range(len(inputList)):
 			print("Net is learning...")
-			train(inputList[i],outputList[i])
-		print("Net has finished.")
+			self.train(inputList[i],outputList[i])
+		print("Net has finished learning.")
+		return self.net
 
 
 			
@@ -148,10 +166,17 @@ class Trainer:
 
 
 
-a = Net([3,4,3,2])
-print(a)
-l = a.calculate([12,23,13])
-print(a)
+red = Net([3,4,3,2])
+print(red)
 print("")
-print(l)
+print(red.calculate([0.5,0.3,0.1]))
+
+
+entrenador = Trainer(red)
+redEntrenada = entrenador.backPropagation([[0.5,0.3,0.1]],[[0,1]])
+print("---------------------------------")
+print(redEntrenada)
+print("")
+print(redEntrenada.calculate([0.5,0.3,0.1]))
+
 
