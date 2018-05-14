@@ -3,7 +3,7 @@ from copy import copy
 import math 
 
 def sigmoid(x):
-	return math.exp(x)/(1+math.exp(x))
+	return 1/(1+math.exp(-x))
 
 def dSigmoid(x):
 	return math.exp(x)/(1+math.exp(x))**2
@@ -33,7 +33,7 @@ class Layer:
 		self.listW = []
 		for i in range(numNeurons):
 			self.listNeurons.append(Neuron(i))
-			listaA = [1 for j in range(numNeuronsNext)]
+			listaA = [0 for j in range(numNeuronsNext)]
 			self.listW.append(listaA)
 
 	def __str__(self):
@@ -128,24 +128,46 @@ class Trainer:
 
 
 	def train(self,initialValues,finalValues):
+		h = 1
+		indexLastLayer = len(self.net.listLayer)-1
 		estimatedValues = self.net.calculate(initialValues)
 		netc = copy(self.net)
 		#last layer
 		for j in range(len(self.net.listLayer[-1].listNeurons)):
 			# New bias
-			x =  0.01*self.dC_dBlj(len(self.net.listLayer)-1,j,finalValues[j],True)
+			x =  h*self.dC_dBlj(indexLastLayer,j,finalValues[j],True)
 			netc.listLayer[-1].listNeurons[j].bias = self.net.listLayer[-1].listNeurons[j].bias - x
 			# New Weights 
 			for k in range(len(self.net.listLayer[-2].listNeurons)):
-				x = 0.01*self.dC_dWljk(len(self.net.listLayer)-1,j,k,finalValues[j],True)
+				x = h*self.dC_dWljk(indexLastLayer,j,k,finalValues[j],True)
 				netc.listLayer[-1].listW[j][k] = self.net.listLayer[-1].listW[j][k] - x
 		# New finalValues
 		finalValues1 = []
 		for k in range(len(self.net.listLayer[-2].listNeurons)):
-			x = self.dC_dAljk(len(self.net.listLayer)-1,k,finalValues,True)
+			x = self.dC_dAljk(indexLastLayer,k,finalValues,True)
 			finalValues1.append(x)
 		finalValues = finalValues1
 		self.net = netc
+		
+		# all Layers
+		il = indexLastLayer-1 #index of the layer before the last one 
+		for l in range(len(self.net.listLayer)-2):
+			# layer l
+			for j in range(len(self.net.listLayer[il-l].listNeurons)):
+				# New bias
+				x =  h*self.dC_dBlj(il-l,j,finalValues[j])
+				netc.listLayer[il-l].listNeurons[j].bias = self.net.listLayer[il-l].listNeurons[j].bias - x
+				# New Weights 
+				for k in range(len(self.net.listLayer[il-l-1].listNeurons)):
+					x = h*self.dC_dWljk(il-l,j,k,finalValues[j])
+					netc.listLayer[il-l].listW[j][k] = self.net.listLayer[il-l].listW[j][k] - x
+			# New finalValues
+			finalValues1 = []
+			for k in range(len(self.net.listLayer[il-l-1].listNeurons)):
+				x = self.dC_dAljk(il-l,k,finalValues)
+				finalValues1.append(x)
+			finalValues = finalValues1
+			self.net = netc
 
 
 
@@ -166,17 +188,29 @@ class Trainer:
 
 
 
-red = Net([3,4,3,2])
-print(red)
+red = Net([2,5,2])
+#print(red)
 print("")
-print(red.calculate([0.5,0.3,0.1]))
+print(red.calculate([0.1,0.03]))
 
+#Data
+initial = []
+final = []
+for i in range(10000):
+	initial.append([0.1,(i%10)/100])
+	final.append([0.1+(i%10)/100,0])
+	
 
 entrenador = Trainer(red)
-redEntrenada = entrenador.backPropagation([[0.5,0.3,0.1]],[[0,1]])
+redEntrenada = entrenador.backPropagation(initial,final)
 print("---------------------------------")
-print(redEntrenada)
+#print(redEntrenada)
 print("")
-print(redEntrenada.calculate([0.5,0.3,0.1]))
+print("0.1+0.02 = " + str(redEntrenada.calculate([0.1,0.02])))
+print("0.1+0.03 = " + str(redEntrenada.calculate([0.1,0.03])))
+print("0.1+0.04 = " + str(redEntrenada.calculate([0.1,0.04])))
+print("0.1+0.06 = " + str(redEntrenada.calculate([0.1,0.06])))
+print("0.1+0.07 = " + str(redEntrenada.calculate([0.1,0.07])))
+print("0.1+0.01 = " + str(redEntrenada.calculate([0.1,0.01])))
 
 
