@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 from copy import copy
 import math 
+import numpy as np 
+import mnist_loader as ml
 
 def sigmoid(x):
-	return 1/(1+math.exp(-x))
+	return 1.0/(1.0+math.exp(-x))
 
 def dSigmoid(x):
-	return math.exp(x)/(1+math.exp(x))**2
+	return sigmoid(x)*(1-sigmoid(x))
 
 
 class Neuron:
@@ -51,8 +53,8 @@ class Net:
 	def __str__(self):
 		string = ""
 		for i in self.listLayer:
-			string += str(i)+"\n"
 			string += str(i.listW)+"\n"	
+			string += str(i)+"\n"
 		return string
 
 	def calculate(self,initalValues):
@@ -129,14 +131,16 @@ class Trainer:
 
 	def train(self,initialValues,finalValues):
 		h = 1
+		h1 = 1
 		indexLastLayer = len(self.net.listLayer)-1
 		estimatedValues = self.net.calculate(initialValues)
 		netc = copy(self.net)
 		#last layer
 		for j in range(len(self.net.listLayer[-1].listNeurons)):
 			# New bias
-			x =  h*self.dC_dBlj(indexLastLayer,j,finalValues[j],True)
+			x =  h1*self.dC_dBlj(indexLastLayer,j,finalValues[j],True)
 			netc.listLayer[-1].listNeurons[j].bias = self.net.listLayer[-1].listNeurons[j].bias - x
+			#print("Error: "+str(x))
 			# New Weights 
 			for k in range(len(self.net.listLayer[-2].listNeurons)):
 				x = h*self.dC_dWljk(indexLastLayer,j,k,finalValues[j],True)
@@ -155,7 +159,7 @@ class Trainer:
 			# layer l
 			for j in range(len(self.net.listLayer[il-l].listNeurons)):
 				# New bias
-				x =  h*self.dC_dBlj(il-l,j,finalValues[j])
+				x =  h1*self.dC_dBlj(il-l,j,finalValues[j])
 				netc.listLayer[il-l].listNeurons[j].bias = self.net.listLayer[il-l].listNeurons[j].bias - x
 				# New Weights 
 				for k in range(len(self.net.listLayer[il-l-1].listNeurons)):
@@ -174,7 +178,7 @@ class Trainer:
 	def backPropagation(self,inputList,outputList):
 		print("Net has started learning.")
 		for i in range(len(inputList)):
-			print("Net is learning...")
+			print(str(i)+" Net is learning...")
 			self.train(inputList[i],outputList[i])
 		print("Net has finished learning.")
 		return self.net
@@ -183,34 +187,20 @@ class Trainer:
 			
 
 
-
-
-
-
-
-red = Net([2,5,2])
+red = Net([784,100,10])
 #print(red)
-print("")
-print(red.calculate([0.1,0.03]))
-
-#Data
-initial = []
-final = []
-for i in range(10000):
-	initial.append([0.1,(i%10)/100])
-	final.append([0.1+(i%10)/100,0])
-	
+#print(red.calculate([0.1,0]))
 
 entrenador = Trainer(red)
-redEntrenada = entrenador.backPropagation(initial,final)
-print("---------------------------------")
-#print(redEntrenada)
-print("")
-print("0.1+0.02 = " + str(redEntrenada.calculate([0.1,0.02])))
-print("0.1+0.03 = " + str(redEntrenada.calculate([0.1,0.03])))
-print("0.1+0.04 = " + str(redEntrenada.calculate([0.1,0.04])))
-print("0.1+0.06 = " + str(redEntrenada.calculate([0.1,0.06])))
-print("0.1+0.07 = " + str(redEntrenada.calculate([0.1,0.07])))
-print("0.1+0.01 = " + str(redEntrenada.calculate([0.1,0.01])))
 
+print("Data are loading...")
+data = ml.load_data_wrapper()
+print("Data have been loaded.")
 
+red = entrenador.backPropagation(data[0][0:500],data[1][0:500])
+print("------------------------------")
+print(red.calculate(data[0][700]))
+print(red.calculate(data[0][701]))
+print(red.calculate(data[0][702]))
+print(red.calculate(data[0][703]))
+#print(red.calculate([0.1,0]))
