@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from copy import copy
 import math 
+import random
 import numpy as np 
 import mnist_loader as ml
 
@@ -16,7 +17,7 @@ class Neuron:
 		self.id = n
 		self.z = 0
 		self.a = sigmoid(self.z)
-		self.bias = 0
+		self.bias = 0 #random.random()-0.5
 
 	def __str__(self):
 		return "( a:"+str((int(self.a*100))/100)+" )"
@@ -35,7 +36,8 @@ class Layer:
 		self.listW = []
 		for i in range(numNeurons):
 			self.listNeurons.append(Neuron(i))
-			listaA = [0 for j in range(numNeuronsNext)]
+			listaA = [random.random()-0.5 for j in range(numNeuronsNext)]
+			#listaA = [0 for j in range(numNeuronsNext)]
 			self.listW.append(listaA)
 
 	def __str__(self):
@@ -91,7 +93,8 @@ class Trainer:
 		# dC_dAlj
 		if(initial):
 			alj = self.net.listLayer[l].listNeurons[j].a
-			acum *= 2*(alj-y)**2
+			acum *= (2*(alj-y))
+			#acum *= 2*((alj-y)**2)
 		else:
 			acum *= y 
 		return acum
@@ -106,7 +109,9 @@ class Trainer:
 		#dC_dAlj
 		if(initial):
 			alj = self.net.listLayer[l].listNeurons[j].a
-			acum *= 2*(alj-y)**2
+			acum *= (2*(alj-y))
+			print("Error: "+str(alj-y))
+			#acum *= 2*((alj-y)**2)
 		else:
 			acum *= y 
 		return acum
@@ -122,7 +127,8 @@ class Trainer:
 			# dC_dZlj
 			if(initial):
 				alj = self.net.listLayer[l].listNeurons[j].a
-				acum1 *= 2*(alj-vector_y[j])**2
+				acum1 *= 2*(alj-vector_y[j])
+				#acum1 *= 2*(alj-vector_y[j])**2
 			else:
 				acum1 *= vector_y[j]
 			acum += acum1
@@ -140,11 +146,13 @@ class Trainer:
 			# New bias
 			x =  h1*self.dC_dBlj(indexLastLayer,j,finalValues[j],True)
 			netc.listLayer[-1].listNeurons[j].bias = self.net.listLayer[-1].listNeurons[j].bias - x
-			#print("Error: "+str(x))
+			#print("Error: "+str(self.dC_dBlj(indexLastLayer,j,finalValues[j],True)))
+
 			# New Weights 
 			for k in range(len(self.net.listLayer[-2].listNeurons)):
 				x = h*self.dC_dWljk(indexLastLayer,j,k,finalValues[j],True)
 				netc.listLayer[-1].listW[j][k] = self.net.listLayer[-1].listW[j][k] - x
+
 		# New finalValues
 		finalValues1 = []
 		for k in range(len(self.net.listLayer[-2].listNeurons)):
@@ -187,9 +195,8 @@ class Trainer:
 			
 
 
-red = Net([784,100,10])
+red = Net([784,32,32,10])
 #print(red)
-#print(red.calculate([0.1,0]))
 
 entrenador = Trainer(red)
 
@@ -197,10 +204,9 @@ print("Data are loading...")
 data = ml.load_data_wrapper()
 print("Data have been loaded.")
 
-red = entrenador.backPropagation(data[0][0:500],data[1][0:500])
+red = entrenador.backPropagation(data[0][0:5000],data[1][0:5000])
 print("------------------------------")
 print(red.calculate(data[0][700]))
 print(red.calculate(data[0][701]))
 print(red.calculate(data[0][702]))
 print(red.calculate(data[0][703]))
-#print(red.calculate([0.1,0]))
