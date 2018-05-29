@@ -1,14 +1,17 @@
 #### Libraries
 import random
 import numpy as np
+import time
 
 class Network(object):
 
     def __init__(self, sizes):
         self.num_layers = len(sizes)
         self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
+        self.biases = [np.random.logistic(0,1,(y, 1)) for y in sizes[1:]]
+        #self.biases = [np.random.randt(y, 1) for y in sizes[1:]]
+        self.weights = [np.random.logistic(0,1,(y, x)) for x, y in zip(sizes[:-1], sizes[1:])]
+        #self.weights = [np.random.randt(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
 
     def feedforward(self, a):
         for b, w in zip(self.biases, self.weights):
@@ -28,6 +31,7 @@ class Network(object):
                 print "Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)
             else:
                 print "Epoch {0} complete".format(j)
+            #print(self.biases)
 
     def update_mini_batch(self, mini_batch, eta):
         nabla_b = [np.zeros(b.shape) for b in self.biases]
