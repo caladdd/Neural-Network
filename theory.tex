@@ -3,23 +3,38 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{datetime}
-\usepackage[margin=1.25in]{geometry}
+\usepackage[left=4cm,top=3cm,right=2cm,bottom=3cm]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 
 \newdateformat{monthyeardate}{
   \monthname[\THEMONTH], \THEYEAR}
-
-\title{A take on Neural Networks}
-\author{Calad J.}
-\author{Fonseca D.}
-\author{Ortega A.}
-\author{Marin M.}
-\date{\today}
-
 \begin{document}
+\title{Minimizing the Error Function in a Neural Network}
+
+
 \maketitle
+
+\vfill
+\hfill
+\begin{center}
+Calad J.,Fonseca D., Ortega A., Marin M.\\
+
+Numerical Analysis Investigation Project
+\end{center}
+\vfill
+\hfill
+
+\begin{center}
+Universidad EAFIT\\
+Escuela de Ingeniería\\
+Departamento de Informática y Sistemas\\
+\end{center}
+\clearpage
+
 \tableofcontents
+\clearpage
+\section{Introduction}
 \section{Basics on Neural Networks}
 A neural network can be viewed as a directed graph in which each vertex serves
 as a ``neuron'' that has an associated output value telling how active it is.
@@ -370,5 +385,6 @@ Other important quantities will be the partial derivative of the cost function i
 
 Considering all of these values we can now proceed to understand how the backpropagation algorithm works. First, the input is given and so the first layer will have an activation value. For each layer we calculate the weighted input and the activation of the neurons in the layer. With this it is possible to calculate the output error and backpropagate it by calculating the error in each of the previous layers. Our output will be the gradient of the cost function. This output represents how the cost changes depending on the weights and biases so that we can minimize it. 
 
-
+\section{Results}
+\section{Conclusion}
 \end{document}
