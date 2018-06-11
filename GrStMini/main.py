@@ -11,7 +11,7 @@ def main():
     if sys.argv < 2:
         net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
     else:
-        net.SGD(training_data, 1, 1, float(sys.argv[1]), test_data=test_data)
+        net.SGD(training_data, int(sys.argv[1]), int(sys.argv[2]), float(sys.argv[3]), test_data=test_data)
 
     while(True):
 

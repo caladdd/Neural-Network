@@ -23,12 +23,7 @@ class Network(object):
             n_test = len(test_data)
             n = len(training_data)
 
-        mini_batches = [training_data[k] for k in xrange(50000)]
-       
-        
-        for mini_batch in mini_batches:
-            self.update_mini_batch([mini_batch], eta)
-
+        self.update_mini_batch(training_data, eta)
         j = 1
         if test_data:
             print "Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)
@@ -39,7 +34,10 @@ class Network(object):
     def update_mini_batch(self, mini_batch, eta):
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
+        i = 0
         for x, y in mini_batch:
+            print i
+            i+=1
             delta_nabla_b, delta_nabla_w = self.backprop(x, y)
             nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
             nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
