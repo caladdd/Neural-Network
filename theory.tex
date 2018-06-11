@@ -6,21 +6,26 @@
 \usepackage[left=4cm,top=3cm,right=2cm,bottom=3cm]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
+\usepackage{fancyhdr}
+\usepackage{lipsum} % only for showing some sample text
+\fancyhf{} % clear all header and footers
+\renewcommand{\headrulewidth}{0pt} % remove the header rule
+\cfoot{\vfill\thepage}
+\pagestyle{fancy}
 
 \newdateformat{monthyeardate}{
   \monthname[\THEMONTH], \THEYEAR}
 \begin{document}
 \title{Minimizing the Error Function in a Neural Network}
 
-
+\clearpage
 \maketitle
+\thispagestyle{empty}
 
 \vfill
 \hfill
 \begin{center}
 Calad J.,Fonseca D., Ortega A., Marin M.\\
-
-Numerical Analysis Investigation Project
 \end{center}
 \vfill
 \hfill
@@ -29,12 +34,24 @@ Numerical Analysis Investigation Project
 Universidad EAFIT\\
 Escuela de Ingeniería\\
 Departamento de Informática y Sistemas\\
+Medellín\\
+2018
 \end{center}
 \clearpage
 
 \tableofcontents
 \clearpage
 \section{Introduction}
+Neural networks have been growing in importance rapidly due to the advances
+that have occurred in areas related to big data. The rapid grow that databases have
+experimented in the last few years has helped met one of the biggest requirements 
+that artificial intelligences have to function properly, a large supply of training 
+data. Thanks to artificial intelligence it has been possible to make educated
+decisions with amounts of data that would otherwise be overwhelming. Improving such
+decision making process has made the development of the area a focal point of
+research for big companies. In the present document we will seek to explore an
+specific type of artificial intelligence and how it could be improved in order
+to achieve a faster learning rate.
 \section{Basics on Neural Networks}
 A neural network can be viewed as a directed graph in which each vertex serves
 as a ``neuron'' that has an associated output value telling how active it is.
