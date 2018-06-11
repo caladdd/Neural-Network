@@ -26,6 +26,7 @@
 \hfill
 \begin{center}
 Calad J.,Fonseca D., Ortega A., Marin M.\\
+Numerical Analysis Project
 \end{center}
 \vfill
 \hfill
@@ -401,6 +402,20 @@ This allows us to move the error backwards by calculating the error in the previ
 Other important quantities will be the partial derivative of the cost function in respect to a bias in the network and the partial derivative of the cost function in respect to a weight in the network. 
 
 Considering all of these values we can now proceed to understand how the backpropagation algorithm works. First, the input is given and so the first layer will have an activation value. For each layer we calculate the weighted input and the activation of the neurons in the layer. With this it is possible to calculate the output error and backpropagate it by calculating the error in each of the previous layers. Our output will be the gradient of the cost function. This output represents how the cost changes depending on the weights and biases so that we can minimize it. 
+
+\section{Backpropagation Optimizations}
+There are different modifications that can accelerate the convergence of the algorithm. This is achieved by 
+modifying the parameters and the way the training data is used. Three of these modifications will be explained:
+\\
+\begin{enumerate}
+\item Batch Gradient Descent: The gradient is calculated for the complete dataset and performs only one update. 
+It can sometimes be slow for datasets that don't fit in memory. This is usually done by stages where the gradient vector is calculated for each stage.
+
+\item Stochastic Gradient Descent: This optimization updates the parameters for each stage. The convergence is faster and better when the training dataset is shuffled.
+
+\item Mini-batch Gradient Descent: This modification allows choosing the frequency of update. In this way the variance of the parameter updates.  
+
+\end{enumerate}
 
 \section{Results}
 \section{Conclusion}
