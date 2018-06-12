@@ -418,5 +418,159 @@ It can sometimes be slow for datasets that don't fit in memory. This is usually 
 \end{enumerate}
 
 \section{Results}
+To gather the results of the comparison between algorithms a network which seeks to identify handwritten digits will be used as the training example.
+Here a comparison between the quality of the 3 variants of the Gradient Descent Method will be shown. The quality is measured as a success probability taking into account different values for ETA \{0.01, 3, 10, 20\}.
+For this study the tests are made 6 times with random initial values.\\
+
+\centering
+\begin{tabular}{l|lll}
+~       & Gradient Descent~ & SGD     & M-Batch GD  \\ 
+        &   Eta = 0,01      &   Eta = 0,01& Eta = 0,01       \\
+        &                   &         & MB-Size =5000        \\
+        &                   &         & Epoch = 25          \\
+\hline
+1       & 8,94\%            & 33,87\% & 7,05\%      \\
+2       & 12,37\%           & 35,84\% & 10,52\%     \\
+3       & 14,59\%           & 53,47\% & 15,90\%     \\
+4       & 9,38\%            & 43,85\% & 12,35\%     \\
+5       & 8,81\%            & 52,20\% & 10,05\%     \\
+6       & 12,13\%           & 43,15\% & 10,48\%     \\
+AVG     & 11,04\%           & 43,73\% & 11,06\%    \\
+\end{tabular}
+\begin{center}
+Table 1. Results with an eta of 0.1
+\end{center}
+\centering
+\begin{tabular}{l|lll}
+~       & Gradient Descent~ & SGD     & M-Batch GD  \\ 
+        &   Eta = 10        &   Eta = 10& Eta = 10        \\
+        &                   &         & MB-Size =5000        \\
+        &                   &         & Epoch = 25          \\
+\hline
+1       & 9,30\%            & 23,12\% & 77,60\%      \\
+2       & 9,80\%           & 16,56\% & 73,96\%     \\
+3       & 8,24\%           & 17,78\% & 71,96\%     \\
+4       & 9,91\%           & 11,35\% & 82,03\%     \\
+5       & 10,00\%           & 11,70\% & 69,74\%     \\
+6       & 11,02\%           & 14,74\% & 83,48\%     \\
+AVG     & 9,71\%           & 15,88\% & 76,46\%    
+\end{tabular}
+\begin{center}
+Table 2. Results with an eta of 10
+\end{center}
+\centering
+\begin{tabular}{l|lll}
+~       & Gradient Descent~ & SGD     & M-Batch GD  \\ 
+        &   Eta = 20        &   Eta = 20& Eta = 20        \\
+        &                   &         & MB-Size =5000        \\
+        &                   &         & Epoch = 25          \\
+\hline
+1       & 10,05\%           & 10,01\% & 37,02\%      \\
+2       & 18,00\%           & 14,85\% & 12,65\%     \\
+3       & 8,44\%            & 12,60\% & 44,39\%     \\
+4       & 10,09\%           & 8,92\% & 53,78\%     \\
+5       & 6,99\%            & 10,51\% & 62,29\%     \\
+6       & 9,67\%            & 11,13\% & 63,24\%     \\
+AVG     & 10,53\%           & 11,34\% & 45,56\%    
+\end{tabular}
+\begin{center}
+Table 3. Results with an eta of 20
+\end{center}
+\begin{flushleft}
+\justify
+The Mini-batch Gradient Descent gave some of the best results as it combines 
+characteristics from the previous methods. It also brings other parameters that can affect the solution in some way. The following tests measure the 
+quality of the method as a success probability.
+\end{flushleft}
+\clearpage
+
+\centering
+\begin{tabular}{l|llll}
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Mini-Batch GD}     \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~Eta = 10}     \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ M-B Size = 5000}    \\
+  & Epoch = 5 & Epoch = 10 & Epoch = 30 & Epoch = 50                \\ 
+\hline
+1 & 35,86\%   & 45,11\%    & 68,12\%    & 79,41\%                   \\
+2 & 38,55\%   & 45,79\%    & 73,91\%    & 79,96\%                   \\
+3 & 36,68\%   & 51,71\%    & 75,56\%    & 79,86\%                  
+\end{tabular}
+\begin{center}
+Table 4. Different stage quantity
+\end{center}
+
+\centering
+\begin{tabular}{l|llll}
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Mini-Batch GD}    \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~M-B Size = 5000}    \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Epoch = 25}     \\
+  & Eta = 0,01 & Eta = 3 & Eta = 10 & Eta = 20                     \\ 
+\hline
+1 & 7,05\%     & 36,68\% & 77,60\%  & 37,02\%                      \\
+2 & 10,52\%    & 50,87\% & 73,96\%  & 44,39\%                      \\
+3 & 15,90\%    & 37,76\% & 71,96\%  & 53,78\%                     
+\end{tabular}
+\begin{center}
+Table 5. Different learning rates
+\end{center}
+\centering
+\begin{tabular}{l|llll}
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Mini-Batch GD}  \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~Epoch = 25}    \\
+\multicolumn{5}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~Eta = 10}    \\
+  & ~M-B Size = 1.500 & ~M-B Size = 3.000 & ~M-B Size = 5.000 & ~M-B Size = 10.000     \\ 
+\hline
+1 & 73,70\%      & 73,26\%      & 77,60\%      & 53,35\%                \\
+2 & 80,84\%      & 86,25\%      & 73,96\%      & 58,40\%                \\
+3 & 82,59\%      & 78,14\%      & 71,96\%      & 52,92\%               
+\end{tabular}
+\begin{center}
+Table 6. Different batch sizes
+\end{center}
+\justify
+
+The following tables are the results of the Stochastic Grandeint Descent and Mini-batch Gradient Descent methods for the network in question. In both cases it was attempted to get the best results in terms of success rates.
+
+\centering
+\begin{tabular}{l|l}
+    & \begin{tabular}[c]{@{}l@{}}~ Stochastic Gradient Descent~\\~Eta = 1\end{tabular}  \\ 
+\hline
+1   & 90,88\%                                                   \\
+2   & 90,72\%                                                   \\
+3   & 91,22\%                                                   \\
+4   & 91,02\%                                                   \\
+5   & 90,34\%                                                   \\
+6   & 91,38\%                                                   \\
+AVG & 90,93\%                                                  
+\end{tabular}
+\begin{center}
+Table 7. Stochastic Gradient Descent success rates
+\end{center}
+\clearpage
+\centering
+\begin{tabular}{l|lll}
+    & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Mini-Batch Gradient Descent}   \\
+    & Epoch = 12 & M-B Size = 1500 & Eta = 10                 \\ 
+\hline
+1   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~80,37\%}  \\
+2   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~70,53\%}  \\
+3   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~86,53\%}  \\
+4   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~73,98\%}  \\
+5   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~81,25\%}  \\
+6   & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~86,04\%}  \\
+AVG & \multicolumn{3}{l}{~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~79,78\%} 
+\end{tabular}
+
+\begin{center}
+Table 8. Mini-batch Gradient Descent success rates
+\end{center}
 \section{Conclusion}
+\section{References}
+
+\begin{flushleft}
+[1]S. Ruder, "An overview of gradient descent optimization algorithms", Sebastian Ruder, 2018. [Online]. Available: http://ruder.io/optimizing-gradient-descent/index.html. [Accessed: 11- Jun- 2018].\\
+
+[2]M. Nielsen, "Neural Networks and Deep Learning", Neuralnetworksanddeeplearning.com, 2018. [Online]. Available: http://neuralnetworksanddeeplearning.com/index.html. [Accessed: 11- Jun- 2018].\\
+\end{flushleft}
 \end{document}
+
